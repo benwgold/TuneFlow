@@ -1,0 +1,476 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		80CBA816186A36A300AF3753 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA815186A36A300AF3753 /* Foundation.framework */; };
+		80CBA818186A36A300AF3753 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA817186A36A300AF3753 /* CoreGraphics.framework */; };
+		80CBA81A186A36A300AF3753 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA819186A36A300AF3753 /* UIKit.framework */; };
+		80CBA820186A36A300AF3753 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 80CBA81E186A36A300AF3753 /* InfoPlist.strings */; };
+		80CBA822186A36A300AF3753 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 80CBA821186A36A300AF3753 /* main.m */; };
+		80CBA826186A36A300AF3753 /* TFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 80CBA825186A36A300AF3753 /* TFAppDelegate.m */; };
+		80CBA829186A36A300AF3753 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80CBA827186A36A300AF3753 /* Main.storyboard */; };
+		80CBA82C186A36A300AF3753 /* TFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 80CBA82B186A36A300AF3753 /* TFViewController.m */; };
+		80CBA82E186A36A300AF3753 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80CBA82D186A36A300AF3753 /* Images.xcassets */; };
+		80CBA835186A36A300AF3753 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA834186A36A300AF3753 /* XCTest.framework */; };
+		80CBA836186A36A300AF3753 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA815186A36A300AF3753 /* Foundation.framework */; };
+		80CBA837186A36A300AF3753 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA819186A36A300AF3753 /* UIKit.framework */; };
+		80CBA83F186A36A300AF3753 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 80CBA83D186A36A300AF3753 /* InfoPlist.strings */; };
+		80CBA841186A36A300AF3753 /* TuneFlowTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 80CBA840186A36A300AF3753 /* TuneFlowTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		80CBA838186A36A300AF3753 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 80CBA80A186A36A300AF3753 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 80CBA811186A36A300AF3753;
+			remoteInfo = TuneFlow;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		80CBA812186A36A300AF3753 /* TuneFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TuneFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		80CBA815186A36A300AF3753 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		80CBA817186A36A300AF3753 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		80CBA819186A36A300AF3753 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		80CBA81D186A36A300AF3753 /* TuneFlow-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TuneFlow-Info.plist"; sourceTree = "<group>"; };
+		80CBA81F186A36A300AF3753 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		80CBA821186A36A300AF3753 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		80CBA823186A36A300AF3753 /* TuneFlow-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TuneFlow-Prefix.pch"; sourceTree = "<group>"; };
+		80CBA824186A36A300AF3753 /* TFAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TFAppDelegate.h; sourceTree = "<group>"; };
+		80CBA825186A36A300AF3753 /* TFAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TFAppDelegate.m; sourceTree = "<group>"; };
+		80CBA828186A36A300AF3753 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		80CBA82A186A36A300AF3753 /* TFViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TFViewController.h; sourceTree = "<group>"; };
+		80CBA82B186A36A300AF3753 /* TFViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TFViewController.m; sourceTree = "<group>"; };
+		80CBA82D186A36A300AF3753 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		80CBA833186A36A300AF3753 /* TuneFlowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TuneFlowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		80CBA834186A36A300AF3753 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		80CBA83C186A36A300AF3753 /* TuneFlowTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TuneFlowTests-Info.plist"; sourceTree = "<group>"; };
+		80CBA83E186A36A300AF3753 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		80CBA840186A36A300AF3753 /* TuneFlowTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TuneFlowTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		80CBA80F186A36A300AF3753 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80CBA818186A36A300AF3753 /* CoreGraphics.framework in Frameworks */,
+				80CBA81A186A36A300AF3753 /* UIKit.framework in Frameworks */,
+				80CBA816186A36A300AF3753 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80CBA830186A36A300AF3753 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80CBA835186A36A300AF3753 /* XCTest.framework in Frameworks */,
+				80CBA837186A36A300AF3753 /* UIKit.framework in Frameworks */,
+				80CBA836186A36A300AF3753 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		80CBA809186A36A300AF3753 = {
+			isa = PBXGroup;
+			children = (
+				80CBA81B186A36A300AF3753 /* TuneFlow */,
+				80CBA83A186A36A300AF3753 /* TuneFlowTests */,
+				80CBA814186A36A300AF3753 /* Frameworks */,
+				80CBA813186A36A300AF3753 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		80CBA813186A36A300AF3753 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				80CBA812186A36A300AF3753 /* TuneFlow.app */,
+				80CBA833186A36A300AF3753 /* TuneFlowTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		80CBA814186A36A300AF3753 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				80CBA815186A36A300AF3753 /* Foundation.framework */,
+				80CBA817186A36A300AF3753 /* CoreGraphics.framework */,
+				80CBA819186A36A300AF3753 /* UIKit.framework */,
+				80CBA834186A36A300AF3753 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		80CBA81B186A36A300AF3753 /* TuneFlow */ = {
+			isa = PBXGroup;
+			children = (
+				80CBA824186A36A300AF3753 /* TFAppDelegate.h */,
+				80CBA825186A36A300AF3753 /* TFAppDelegate.m */,
+				80CBA827186A36A300AF3753 /* Main.storyboard */,
+				80CBA82A186A36A300AF3753 /* TFViewController.h */,
+				80CBA82B186A36A300AF3753 /* TFViewController.m */,
+				80CBA82D186A36A300AF3753 /* Images.xcassets */,
+				80CBA81C186A36A300AF3753 /* Supporting Files */,
+			);
+			path = TuneFlow;
+			sourceTree = "<group>";
+		};
+		80CBA81C186A36A300AF3753 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				80CBA81D186A36A300AF3753 /* TuneFlow-Info.plist */,
+				80CBA81E186A36A300AF3753 /* InfoPlist.strings */,
+				80CBA821186A36A300AF3753 /* main.m */,
+				80CBA823186A36A300AF3753 /* TuneFlow-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		80CBA83A186A36A300AF3753 /* TuneFlowTests */ = {
+			isa = PBXGroup;
+			children = (
+				80CBA840186A36A300AF3753 /* TuneFlowTests.m */,
+				80CBA83B186A36A300AF3753 /* Supporting Files */,
+			);
+			path = TuneFlowTests;
+			sourceTree = "<group>";
+		};
+		80CBA83B186A36A300AF3753 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				80CBA83C186A36A300AF3753 /* TuneFlowTests-Info.plist */,
+				80CBA83D186A36A300AF3753 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		80CBA811186A36A300AF3753 /* TuneFlow */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 80CBA844186A36A300AF3753 /* Build configuration list for PBXNativeTarget "TuneFlow" */;
+			buildPhases = (
+				80CBA80E186A36A300AF3753 /* Sources */,
+				80CBA80F186A36A300AF3753 /* Frameworks */,
+				80CBA810186A36A300AF3753 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TuneFlow;
+			productName = TuneFlow;
+			productReference = 80CBA812186A36A300AF3753 /* TuneFlow.app */;
+			productType = "com.apple.product-type.application";
+		};
+		80CBA832186A36A300AF3753 /* TuneFlowTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 80CBA847186A36A300AF3753 /* Build configuration list for PBXNativeTarget "TuneFlowTests" */;
+			buildPhases = (
+				80CBA82F186A36A300AF3753 /* Sources */,
+				80CBA830186A36A300AF3753 /* Frameworks */,
+				80CBA831186A36A300AF3753 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				80CBA839186A36A300AF3753 /* PBXTargetDependency */,
+			);
+			name = TuneFlowTests;
+			productName = TuneFlowTests;
+			productReference = 80CBA833186A36A300AF3753 /* TuneFlowTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		80CBA80A186A36A300AF3753 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = TF;
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = "Ben Goldberger";
+				TargetAttributes = {
+					80CBA832186A36A300AF3753 = {
+						TestTargetID = 80CBA811186A36A300AF3753;
+					};
+				};
+			};
+			buildConfigurationList = 80CBA80D186A36A300AF3753 /* Build configuration list for PBXProject "TuneFlow" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 80CBA809186A36A300AF3753;
+			productRefGroup = 80CBA813186A36A300AF3753 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				80CBA811186A36A300AF3753 /* TuneFlow */,
+				80CBA832186A36A300AF3753 /* TuneFlowTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		80CBA810186A36A300AF3753 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80CBA82E186A36A300AF3753 /* Images.xcassets in Resources */,
+				80CBA820186A36A300AF3753 /* InfoPlist.strings in Resources */,
+				80CBA829186A36A300AF3753 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80CBA831186A36A300AF3753 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80CBA83F186A36A300AF3753 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		80CBA80E186A36A300AF3753 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80CBA82C186A36A300AF3753 /* TFViewController.m in Sources */,
+				80CBA826186A36A300AF3753 /* TFAppDelegate.m in Sources */,
+				80CBA822186A36A300AF3753 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80CBA82F186A36A300AF3753 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80CBA841186A36A300AF3753 /* TuneFlowTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		80CBA839186A36A300AF3753 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 80CBA811186A36A300AF3753 /* TuneFlow */;
+			targetProxy = 80CBA838186A36A300AF3753 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		80CBA81E186A36A300AF3753 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				80CBA81F186A36A300AF3753 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		80CBA827186A36A300AF3753 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				80CBA828186A36A300AF3753 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		80CBA83D186A36A300AF3753 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				80CBA83E186A36A300AF3753 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		80CBA842186A36A300AF3753 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		80CBA843186A36A300AF3753 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		80CBA845186A36A300AF3753 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TuneFlow/TuneFlow-Prefix.pch";
+				INFOPLIST_FILE = "TuneFlow/TuneFlow-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		80CBA846186A36A300AF3753 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TuneFlow/TuneFlow-Prefix.pch";
+				INFOPLIST_FILE = "TuneFlow/TuneFlow-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		80CBA848186A36A300AF3753 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TuneFlow.app/TuneFlow";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TuneFlow/TuneFlow-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "TuneFlowTests/TuneFlowTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		80CBA849186A36A300AF3753 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TuneFlow.app/TuneFlow";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TuneFlow/TuneFlow-Prefix.pch";
+				INFOPLIST_FILE = "TuneFlowTests/TuneFlowTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		80CBA80D186A36A300AF3753 /* Build configuration list for PBXProject "TuneFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				80CBA842186A36A300AF3753 /* Debug */,
+				80CBA843186A36A300AF3753 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		80CBA844186A36A300AF3753 /* Build configuration list for PBXNativeTarget "TuneFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				80CBA845186A36A300AF3753 /* Debug */,
+				80CBA846186A36A300AF3753 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		80CBA847186A36A300AF3753 /* Build configuration list for PBXNativeTarget "TuneFlowTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				80CBA848186A36A300AF3753 /* Debug */,
+				80CBA849186A36A300AF3753 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 80CBA80A186A36A300AF3753 /* Project object */;
+}
