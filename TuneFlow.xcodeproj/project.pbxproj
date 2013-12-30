@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8026870E186B4B090036F663 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 8026870D186B4B090036F663 /* Song.m */; };
+		80268711186B812F0036F663 /* TFPeripheralViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 80268710186B812F0036F663 /* TFPeripheralViewController.m */; };
 		80CBA816186A36A300AF3753 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA815186A36A300AF3753 /* Foundation.framework */; };
 		80CBA818186A36A300AF3753 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA817186A36A300AF3753 /* CoreGraphics.framework */; };
 		80CBA81A186A36A300AF3753 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA819186A36A300AF3753 /* UIKit.framework */; };
@@ -21,6 +23,9 @@
 		80CBA837186A36A300AF3753 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA819186A36A300AF3753 /* UIKit.framework */; };
 		80CBA83F186A36A300AF3753 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 80CBA83D186A36A300AF3753 /* InfoPlist.strings */; };
 		80CBA841186A36A300AF3753 /* TuneFlowTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 80CBA840186A36A300AF3753 /* TuneFlowTests.m */; };
+		80CBA84B186A394F00AF3753 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA84A186A394F00AF3753 /* MediaPlayer.framework */; };
+		80CBA854186A4D8900AF3753 /* AllSongsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 80CBA853186A4D8900AF3753 /* AllSongsTVC.m */; };
+		80CBA857186A51CA00AF3753 /* TFNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 80CBA856186A51CA00AF3753 /* TFNavigationController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +39,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8026870C186B4B090036F663 /* Song.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Song.h; path = Models/Song.h; sourceTree = "<group>"; };
+		8026870D186B4B090036F663 /* Song.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Song.m; path = Models/Song.m; sourceTree = "<group>"; };
+		8026870F186B812F0036F663 /* TFPeripheralViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFPeripheralViewController.h; sourceTree = "<group>"; };
+		80268710186B812F0036F663 /* TFPeripheralViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFPeripheralViewController.m; sourceTree = "<group>"; };
 		80CBA812186A36A300AF3753 /* TuneFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TuneFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80CBA815186A36A300AF3753 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		80CBA817186A36A300AF3753 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -53,6 +62,11 @@
 		80CBA83C186A36A300AF3753 /* TuneFlowTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TuneFlowTests-Info.plist"; sourceTree = "<group>"; };
 		80CBA83E186A36A300AF3753 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		80CBA840186A36A300AF3753 /* TuneFlowTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TuneFlowTests.m; sourceTree = "<group>"; };
+		80CBA84A186A394F00AF3753 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		80CBA852186A4D8900AF3753 /* AllSongsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllSongsTVC.h; sourceTree = "<group>"; };
+		80CBA853186A4D8900AF3753 /* AllSongsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllSongsTVC.m; sourceTree = "<group>"; };
+		80CBA855186A51CA00AF3753 /* TFNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFNavigationController.h; sourceTree = "<group>"; };
+		80CBA856186A51CA00AF3753 /* TFNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFNavigationController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80CBA84B186A394F00AF3753 /* MediaPlayer.framework in Frameworks */,
 				80CBA818186A36A300AF3753 /* CoreGraphics.framework in Frameworks */,
 				80CBA81A186A36A300AF3753 /* UIKit.framework in Frameworks */,
 				80CBA816186A36A300AF3753 /* Foundation.framework in Frameworks */,
@@ -79,6 +94,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8026870B186B4ADF0036F663 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8026870C186B4B090036F663 /* Song.h */,
+				8026870D186B4B090036F663 /* Song.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		80CBA809186A36A300AF3753 = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +125,7 @@
 		80CBA814186A36A300AF3753 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				80CBA84A186A394F00AF3753 /* MediaPlayer.framework */,
 				80CBA815186A36A300AF3753 /* Foundation.framework */,
 				80CBA817186A36A300AF3753 /* CoreGraphics.framework */,
 				80CBA819186A36A300AF3753 /* UIKit.framework */,
@@ -112,13 +137,20 @@
 		80CBA81B186A36A300AF3753 /* TuneFlow */ = {
 			isa = PBXGroup;
 			children = (
+				8026870B186B4ADF0036F663 /* Models */,
 				80CBA824186A36A300AF3753 /* TFAppDelegate.h */,
 				80CBA825186A36A300AF3753 /* TFAppDelegate.m */,
 				80CBA827186A36A300AF3753 /* Main.storyboard */,
+				8026870F186B812F0036F663 /* TFPeripheralViewController.h */,
+				80268710186B812F0036F663 /* TFPeripheralViewController.m */,
+				80CBA855186A51CA00AF3753 /* TFNavigationController.h */,
+				80CBA856186A51CA00AF3753 /* TFNavigationController.m */,
 				80CBA82A186A36A300AF3753 /* TFViewController.h */,
 				80CBA82B186A36A300AF3753 /* TFViewController.m */,
 				80CBA82D186A36A300AF3753 /* Images.xcassets */,
 				80CBA81C186A36A300AF3753 /* Supporting Files */,
+				80CBA852186A4D8900AF3753 /* AllSongsTVC.h */,
+				80CBA853186A4D8900AF3753 /* AllSongsTVC.m */,
 			);
 			path = TuneFlow;
 			sourceTree = "<group>";
@@ -250,6 +282,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80268711186B812F0036F663 /* TFPeripheralViewController.m in Sources */,
+				8026870E186B4B090036F663 /* Song.m in Sources */,
+				80CBA854186A4D8900AF3753 /* AllSongsTVC.m in Sources */,
+				80CBA857186A51CA00AF3753 /* TFNavigationController.m in Sources */,
 				80CBA82C186A36A300AF3753 /* TFViewController.m in Sources */,
 				80CBA826186A36A300AF3753 /* TFAppDelegate.m in Sources */,
 				80CBA822186A36A300AF3753 /* main.m in Sources */,
@@ -461,6 +497,7 @@
 				80CBA846186A36A300AF3753 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		80CBA847186A36A300AF3753 /* Build configuration list for PBXNativeTarget "TuneFlowTests" */ = {
 			isa = XCConfigurationList;
@@ -469,6 +506,7 @@
 				80CBA849186A36A300AF3753 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
