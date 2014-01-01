@@ -1,41 +1,42 @@
 //
-//  TFViewController.h
+//  BlueCommModel.h
 //  TuneFlow
 //
-//  Created by Ben Goldberger on 12/24/13.
-//  Copyright (c) 2013 Ben Goldberger. All rights reserved.
+//  Created by Ben Goldberger on 1/1/14.
+//  Copyright (c) 2014 Ben Goldberger. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
-#import "BlueCommModel.h"
-
+#import <Foundation/Foundation.h>
 #import <MediaPlayer/MediaPlayer.h>
-#import "AllSongsTVC.h"
-#import "Models/Song.h" 
-
+#import "Models/Song.h"
 
 #import <CoreBluetooth/CoreBluetooth.h>
 
-@interface TFViewController : UIViewController  <BlueCommDelegate>//<CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate>
+
+//delegate protocol that allows the bluecomm to let its owning VC to do things after transfer
+@protocol BlueCommDelegate <NSObject>
+@required
+-(void)transferComplete:(BOOL)successful ;
+@end
 
 
-@property (strong, nonatomic) IBOutlet UIView *syncButton;
+@interface BlueCommModel : NSObject <CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate>
 
-@property (weak, nonatomic) IBOutlet UITextView *textView;
+@property(nonatomic, weak) id delegate;
 
 
-@property (nonatomic, strong) BlueCommModel *blueComm;
-
--(void)transferComplete:(BOOL)successful;
-/*
 @property(nonatomic) bool alreadyReceivedData;
 @property(nonatomic) bool alreadySentData;
+
+
+@property(nonatomic) bool syncStarted;
+@property(nonatomic) NSArray *sharedSongs;
 
 //central properties
 @property (nonatomic, strong) CBCentralManager *centralManager;
 @property (nonatomic, strong) CBPeripheral *peripheral;
 @property (nonatomic, strong) NSMutableData *data;
+@property (weak, nonatomic) IBOutlet UITextView *textView;
 
 //peripheral properties
 @property (nonatomic, strong) CBPeripheralManager *peripheralManager;
@@ -45,5 +46,8 @@
 @property (nonatomic) NSData *dataToSend;
 
 #define NOTIFY_MTU      20
-*/
+
+-(id)init;
+-(void)syncWithDevice;
+
 @end

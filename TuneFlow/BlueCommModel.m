@@ -1,60 +1,42 @@
 //
-//  TFViewController.m
+//  BlueCommModel.m
 //  TuneFlow
 //
-//  Created by Ben Goldberger on 12/24/13.
-//  Copyright (c) 2013 Ben Goldberger. All rights reserved.
+//  Created by Ben Goldberger on 1/1/14.
+//  Copyright (c) 2014 Ben Goldberger. All rights reserved.
 //
 
-#import "TFViewController.h"
+#import "BlueCommModel.h"
 
-
-
-@interface TFViewController ()
-
-@property(nonatomic) bool syncStarted;
-
-//@property(nonatomic) NSArray *sharedSongs;
-
+@interface BlueCommModel()
 @end
+
 
 static NSString * const kServiceUUID = @"2F1B1054-D3AE-4915-A2F6-161654BF12C7";
 static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9FA98";
 
-@implementation TFViewController
 
--(void)transferComplete:(BOOL)successful {
-    if (successful){
-        AllSongsTVC *vc =[self.storyboard instantiateViewControllerWithIdentifier:@"AllSongs"];
-        [vc setSharedSongs: self.blueComm.sharedSongs];
-        [self.navigationController pushViewController:vc animated:true];
-    }
-    else{
-        NSLog(@"ERROR: Transfer was not successful");
-    }
-}
+@implementation BlueCommModel
 
-- (void)viewDidLoad
+- (id)init
 {
-    self.blueComm = [[BlueCommModel alloc]init];
-    self.blueComm.delegate = self;
-    /*
+    self = [super init];
+    
     _data = [[NSMutableData alloc] init];
     _alreadyReceivedData = false;
     _alreadySentData = false;
     _syncStarted = false;
-*/
+    return self;
+    
 }
-
-- (IBAction)syncWithDevice:(id)sender {
+- (void)syncWithDevice{
     if (!self.syncStarted){ //make sure sync only called once, can cause issues otherwise
         self.syncStarted = true;
         //get data to send to central connecters
-        //self.blueComm.dataToSend = [self.blueComm getSongData];
-        [self.blueComm syncWithDevice];
+        self.dataToSend = [self getSongData];
+        [self createCentral];
     }
 }
-/*
 
 -(void) createCentral{
     self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
@@ -67,7 +49,7 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
             [self performSelector:@selector(createPeripheral) withObject:nil afterDelay:5.0];
             
             [self.centralManager scanForPeripheralsWithServices:@[ [CBUUID UUIDWithString:kServiceUUID] ] options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
-             NSLog(@"Scanning started");
+            NSLog(@"Scanning started");
             break;
         default:
             NSLog(@"Central Manager did change state");
@@ -81,12 +63,12 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
         self.peripheral = peripheral;
         NSLog(@"Connecting to peripheral %@", peripheral);
         // Connects to the discovered peripheral
-            [self.centralManager connectPeripheral:peripheral options:nil];
+        [self.centralManager connectPeripheral:peripheral options:nil];
     }
 }
 
-//We've connected to the peripheral, now we need to discover the services and characteristics to find the 'transfer' characteristic.
- 
+/** We've connected to the peripheral, now we need to discover the services and characteristics to find the 'transfer' characteristic.
+ */
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
     NSLog(@"Connected To The Peripheral");
@@ -137,8 +119,8 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
     }
 }
 
-//This callback lets us know more data has arrived via notification on the characteristic
- 
+/** This callback lets us know more data has arrived via notification on the characteristic
+ */
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
     if (error) {
@@ -151,7 +133,7 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
     if ([stringFromData isEqualToString:@"EOM"]) {
         // We have, so show the data,
         NSDictionary *externalSongsToTimes = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:self.data];
-
+        
         
         
         [self.textView setText:[externalSongsToTimes description]];
@@ -165,23 +147,27 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
         [self cleanupPeripheral];
         //self.peripheral = nil;
         self.alreadyReceivedData = TRUE;
-        if ([self.sharedSongs count] > 0){
-            if (self.alreadySentData){
-                AllSongsTVC *vc =[self.storyboard instantiateViewControllerWithIdentifier:@"AllSongs"];
-                [vc setSharedSongs: self.sharedSongs];
-                [self.navigationController pushViewController:vc animated:true];
+        if (self.delegate != nil){
+            if ([self.sharedSongs count] > 0){
+                if (self.alreadySentData){
+                    [self.delegate transferComplete:YES];
+                }
+                else{
+                    self.dataToSend = [NSKeyedArchiver archivedDataWithRootObject:[self getSongTimeDict:self.sharedSongs]];
+                    [self createPeripheral];
+                }
+                
             }
             else{
-                self.dataToSend = [NSKeyedArchiver archivedDataWithRootObject:[self getSongTimeDict:self.sharedSongs]];
-                [self createPeripheral];
+                NSLog(@"ERROR: No shared songs found");
+                [self.delegate transferComplete:NO];
             }
-
         }
         else{
-            //handle case where no songs matched... its a problem
+            NSLog(@"ERROR: No delegate for bluecomm specified");
         }
     }
-        
+    
     else{
         [self.textView setText:@"Getting Text..."];
         // Otherwise, just add the data on to what we already have
@@ -223,6 +209,30 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
     return sharedSongs;
 }
 
+/*
+ - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+ if (error) {
+ NSLog(@"Error changing notification state: %@", error.localizedDescription);
+ }
+ 
+ // Exits if it's not the transfer characteristic
+ if (![characteristic.UUID isEqual:[CBUUID UUIDWithString:kCharacteristicUUID]]) {
+ return;
+ }
+ 
+ // Notification has started
+ if (characteristic.isNotifying) {
+ NSLog(@"Notification began on %@", characteristic);
+ [peripheral readValueForCharacteristic:characteristic];
+ } else { // Notification has stopped
+ // so disconnect from the peripheral
+ NSLog(@"Notification stopped on %@.  Disconnecting", characteristic);
+ [self.centralManager cancelPeripheralConnection:self.peripheral];
+ [self cleanupPeripheral];
+ self.peripheral
+ }
+ }*/
+
 - (void)cleanupPeripheral{
     // Don't do anything if we're not connected
     if (!self.peripheral.isConnected) {
@@ -246,7 +256,6 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
         }
     }
 }
- 
 ////////////////////////////////
 //
 // PERIPHERAL METHODS
@@ -257,12 +266,12 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
 {
     //only create a peripheral if one has yet to be found
     //if (self.peripheral == nil){
-        NSLog(@"existing peripheral not found. Creating one");
-
-        //stop existing scan
-        [self.centralManager stopScan];
-        //make a peripheral manager
-        self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
+    NSLog(@"existing peripheral not found. Creating one");
+    
+    //stop existing scan
+    [self.centralManager stopScan];
+    //make a peripheral manager
+    self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
     //}
 }
 
@@ -327,8 +336,8 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
     
     [self.peripheralManager addService:self.customService];
 }
-//Sends the next amount of data to the connected central
-
+/** Sends the next amount of data to the connected central
+ */
 - (void)sendData
 {
     NSLog(@"sending piece of data");
@@ -351,12 +360,10 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
             NSLog(@"Sent: EOM");
             self.alreadySentData = TRUE;
             if(self.alreadyReceivedData){
-                AllSongsTVC *vc =[self.storyboard instantiateViewControllerWithIdentifier:@"AllSongs"];
-                [vc setSharedSongs: (NSArray *)self.sharedSongs];
-                [self.navigationController pushViewController:vc animated:true];
+                [self.delegate transferComplete:YES];
             }else{
                 [self switchPeripheralToCentral];
-
+                
             }
         }
         
@@ -440,7 +447,8 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
         [self performSelector:@selector(createCentral) withObject:nil afterDelay:2]; //wait 2 seconds so we know peripheral is setup on time
     }
 }
-//Catch when someone subscribes to our characteristic, then start sending them data
+/** Catch when someone subscribes to our characteristic, then start sending them data
+ */
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didSubscribeToCharacteristic:(CBCharacteristic *)characteristic
 {
     NSLog(@"Central subscribed to characteristic");
@@ -457,19 +465,14 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
 }
 
 
-// This callback comes in when the PeripheralManager is ready to send the next chunk of data.
-// This is to ensure that packets will arrive in the order they are sent
-
+/** This callback comes in when the PeripheralManager is ready to send the next chunk of data.
+ *  This is to ensure that packets will arrive in the order they are sent
+ */
 - (void)peripheralManagerIsReadyToUpdateSubscribers:(CBPeripheralManager *)peripheral
 {
     // Start sending again
     [self sendData];
 }
-*/
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 @end
+
