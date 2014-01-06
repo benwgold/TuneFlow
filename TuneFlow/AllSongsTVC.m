@@ -8,6 +8,7 @@
 
 #import "AllSongsTVC.h"
 #import "Song.h"
+#import "MediaPlayerVC.h"
 
 @interface AllSongsTVC ()
 
@@ -27,12 +28,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _selectedSongs = [[NSMutableSet alloc]init];
+    _selectedSongs = [[NSMutableArray alloc]init];
     UIBarButtonItem *btnSave = [[UIBarButtonItem alloc]
                                 initWithTitle:@"Use Selected Songs"
                                 style:UIBarButtonItemStyleDone
                                 target:self
-                                action:@selector(startMediaPlayer:)];
+                                action:@selector(startMediaPlayer)];
     self.navigationItem.rightBarButtonItem = btnSave;
     //self.navigationController.navigationBar.
 
@@ -44,13 +45,55 @@
     self.tableView.dataSource = self;
 }
 
--(void)startMediaPlayer{
-
+-(IBAction)startMediaPlayer{//:(id)sender{
+    [self.blueComm setupTransfer:1];
+}
+-(void)transferComplete:(BOOL)successful{
+    if (successful){
+        MediaPlayerVC *vc =[self.storyboard instantiateViewControllerWithIdentifier:@"MediaPlayer"];
+        [vc setPlaylist: self.finalPlaylist];
+        [vc setBlueComm: self.blueComm];
+        self.blueComm.delegate = vc;
+        [self.navigationController pushViewController:vc animated:true];
+    }
+    else{
+        NSLog(@"ERROR: Transfer was not successful");
+    }
+}
+-(NSData *)getFirstData{
+    if (self.selectedSongs > 0){
+        return [NSKeyedArchiver archivedDataWithRootObject:self.selectedSongs];
+    }
+    else{
+        NSLog(@"ERROR: Must pick at least one song");
+        return nil;
+    }
+}
+-(void)processFirstData:(NSData *)data{
+    //TODO...logic for switch their songs with our songs
+    //now it just appends to end
+    NSMutableArray *finalPlaylist = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    //initalize with their songs
+    //for (Song *song in self.selectedSongs){
+    for (NSString *title in self.selectedSongs){
+        //[finalPlaylist addObject:song];
+        [finalPlaylist addObject:title];
+    }
+    self.finalPlaylist = finalPlaylist;
+}
+-(NSData *)getSecondData{
+    return [NSKeyedArchiver archivedDataWithRootObject:self.finalPlaylist];
+}
+-(void)processSecondData:(NSData *)data{
+    self.finalPlaylist = (NSArray *) [NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
 
 -(void)setSharedSongs:(NSArray *)sharedSongs{
     _sharedSongs = [[NSArray alloc] initWithArray:sharedSongs];
     [self.tableView reloadData];
+}
+-(void)setBlueComm:(BlueCommModel *)blueComm{
+    _blueComm = blueComm;
 }
 
 - (void)didReceiveMemoryWarning
@@ -84,7 +127,8 @@
     
     //Make sure check mark is correct when dequeueing (also have to do on select, but this fixes problem where check appears multiple times when one cell is pressed)
 
-    if ([self.selectedSongs containsObject:song]){
+    //if ([self.selectedSongs containsObject:song]){
+    if ([self.selectedSongs containsObject:[song title]]){
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         
     }
@@ -102,13 +146,17 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     Song *song = [self.sharedSongs objectAtIndex:indexPath.row];
     
-    if ([self.selectedSongs containsObject:song]){
-        [self.selectedSongs removeObject:song];
+    //if ([self.selectedSongs containsObject:song]){
+    //    [self.selectedSongs removeObject:song];
+    if ([self.selectedSongs containsObject:[song title]]){
+        [self.selectedSongs removeObject:[song title]];
         cell.accessoryType = UITableViewCellAccessoryNone;
 
     }
     else{
-        [self.selectedSongs addObject:song];
+        //[self.selectedSongs addObject:song];
+        [self.selectedSongs addObject:[song title]];
+
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
 
     }

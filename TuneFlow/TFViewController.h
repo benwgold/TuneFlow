@@ -14,36 +14,23 @@
 #import "AllSongsTVC.h"
 #import "Models/Song.h" 
 
-
-#import <CoreBluetooth/CoreBluetooth.h>
-
-@interface TFViewController : UIViewController  <BlueCommDelegate>//<CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate>
+@interface TFViewController : UIViewController  <BlueCommDelegate>
 
 
 @property (strong, nonatomic) IBOutlet UIView *syncButton;
 
 @property (weak, nonatomic) IBOutlet UITextView *textView;
+@property(nonatomic) NSArray *sharedSongs;
 
 
 @property (nonatomic, strong) BlueCommModel *blueComm;
 
+
 -(void)transferComplete:(BOOL)successful;
-/*
-@property(nonatomic) bool alreadyReceivedData;
-@property(nonatomic) bool alreadySentData;
+-(NSData *)getFirstData;
+-(void)processFirstData:(NSData *)data;
+-(NSData *)getSecondData;
+-(void)processSecondData:(NSData *)data;
 
-//central properties
-@property (nonatomic, strong) CBCentralManager *centralManager;
-@property (nonatomic, strong) CBPeripheral *peripheral;
-@property (nonatomic, strong) NSMutableData *data;
 
-//peripheral properties
-@property (nonatomic, strong) CBPeripheralManager *peripheralManager;
-@property (nonatomic, strong) CBMutableCharacteristic *customCharacteristic;
-@property (nonatomic, strong) CBMutableService *customService;
-@property (nonatomic) NSInteger sendDataIndex;
-@property (nonatomic) NSData *dataToSend;
-
-#define NOTIFY_MTU      20
-*/
 @end

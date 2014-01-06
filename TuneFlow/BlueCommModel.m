@@ -9,11 +9,11 @@
 #import "BlueCommModel.h"
 
 @interface BlueCommModel()
+
 @end
 
-
-static NSString * const kServiceUUID = @"2F1B1054-D3AE-4915-A2F6-161654BF12C7";
-static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9FA98";
+//static NSString * const kServiceUUID = @"2F1B1054-D3AE-4915-A2F6-161654BF12C7";
+//static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9FA98";
 
 
 @implementation BlueCommModel
@@ -21,34 +21,86 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
 - (id)init
 {
     self = [super init];
-    
+    _curTransferID = -1; //not transferring
     _data = [[NSMutableData alloc] init];
     _alreadyReceivedData = false;
     _alreadySentData = false;
-    _syncStarted = false;
+    _syncInProgress = false;
     return self;
     
 }
-- (void)syncWithDevice{
-    if (!self.syncStarted){ //make sure sync only called once, can cause issues otherwise
-        self.syncStarted = true;
+-(NSString *)getServiceUUID:(NSInteger)serviceID{
+    switch (serviceID){
+        case 0:
+            return @"2F1B1054-D3AE-4915-A2F6-161654BF12C7";
+        case 1:
+            return @"611836BD-BC8D-44D9-9059-C6BDC177CF01";
+        case 2:
+            return @"171838F3-2D96-44FD-932D-EAA87236C3E5";
+        default:
+            NSLog(@"ERROR: Service id not valid nsinteger");
+            return nil;
+    }
+}
+-(NSString *)getCharacteristicUUID:(NSInteger)characteristicID{
+    switch (characteristicID){
+        case 0:
+            return @"E275E53A-EE3F-46F2-B408-727EEFE9FA98";
+        case 1:
+            return @"4E51F472-ED4E-4AB9-AC97-AFCB7AA4D6DA";
+        case 2:
+            return @"97C05080-5C8F-4BCA-8184-87A1F6BEF593";
+        default:
+            NSLog(@"ERROR: Service id not valid nsinteger");
+            return nil;
+    }
+}
+
+- (void)setupTransfer:(NSInteger)transferID{
+    if (!self.syncInProgress){ //make sure sync only called once, can cause issues otherwise
+        self.curTransferID = transferID;
+        self.syncInProgress = true;
+        // Clear the data that we may already have
+        [self.data setLength:0];
         //get data to send to central connecters
-        self.dataToSend = [self getSongData];
-        [self createCentral];
+        self.dataToSend = [self.delegate getFirstData];
+        if (self.centralManager == nil){
+            [self createCentral];
+        }
+        else{
+            if (self.peripheral != nil){
+                switch (self.centralManager.state) {
+                    case CBCentralManagerStatePoweredOn:
+                        // Scans for any peripheral
+                        [self.peripheral discoverServices:@[[CBUUID UUIDWithString:[self getServiceUUID:self.curTransferID]]]];
+                        NSLog(@"Looking for services");
+                        break;
+                    default:
+                        NSLog(@"Central Manager not in right state, even tho created");
+                        break;
+                }
+            }
+        }
     }
 }
 
 -(void) createCentral{
-    self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+    if (self.centralManager == nil){
+        self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+    }
+    else{
+        
+    }
 }
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
+    
     switch (central.state) {
         case CBCentralManagerStatePoweredOn:
             // Scans for any peripheral
             
-            [self performSelector:@selector(createPeripheral) withObject:nil afterDelay:5.0];
+            [self performSelector:@selector(handlePeripheralNotFound) withObject:nil afterDelay:5.0];
             
-            [self.centralManager scanForPeripheralsWithServices:@[ [CBUUID UUIDWithString:kServiceUUID] ] options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
+            [self.centralManager scanForPeripheralsWithServices:@[ [CBUUID UUIDWithString:[self getServiceUUID:self.curTransferID]] ] options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
             NSLog(@"Scanning started");
             break;
         default:
@@ -57,6 +109,17 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
     }
 }
 
+//occurs after central manager created
+-(void)handlePeripheralNotFound{
+    if (self.peripheral == nil){
+        if (self.peripheralManager == nil){
+        [self createPeripheral];
+        }
+        else{
+            NSLog(@"THinking about creating peripheral because central still has self.peripheral = nil, but self.peripheralmanager!=nil");
+        }
+    }
+}
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI {
     if (self.peripheral != peripheral) {
@@ -84,35 +147,46 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
     peripheral.delegate = self;
     
     // Search only for services that match our UUID
-    [peripheral discoverServices:@[[CBUUID UUIDWithString:kServiceUUID]]];
+    [peripheral discoverServices:@[[CBUUID UUIDWithString:[self getServiceUUID:self.curTransferID]]]];
 }
+/*Looked for services, and found some
+ */
 - (void)peripheral:(CBPeripheral *)aPeripheral didDiscoverServices:(NSError *)error {
     if (error) {
         NSLog(@"Error discovering service: %@", [error localizedDescription]);
-        [self cleanupPeripheral];
+        [self stopNotifying];
         return;
     }
     NSLog(@"trying to find services");
+    bool serviceAlreadySetup = false;
+    NSLog([aPeripheral.services description]);
     for (CBService *service in aPeripheral.services) {
         NSLog(@"service found");
         NSLog(@"Service found with UUID: %@", service.UUID);
         
         // Discovers the characteristics for a given service
-        if ([service.UUID isEqual:[CBUUID UUIDWithString:kServiceUUID]]) {
-            [self.peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:kCharacteristicUUID]] forService:service];
+        if ([service.UUID isEqual:[CBUUID UUIDWithString:[self getServiceUUID:self.curTransferID]]]) {
+            serviceAlreadySetup = true;
+            [self.peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:[self getCharacteristicUUID:self.curTransferID]]] forService:service];
         }
+    }
+    //used when stuff is already created
+
+    if((self.peripheralManager != nil) && !serviceAlreadySetup){
+        //this happens to start the exchange after the very first exchange.  First guy looks for peripheral services. Cant find any.  Sets up service himself.
+        [self setupService];
     }
 }
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
     if (error) {
         NSLog(@"Error discovering characteristic: %@", [error localizedDescription]);
-        [self cleanupPeripheral];
+        [self stopNotifying];
         return;
     }
     NSLog(@"Found characteristic");
-    if ([service.UUID isEqual:[CBUUID UUIDWithString:kServiceUUID]]) {
+    if ([service.UUID isEqual:[CBUUID UUIDWithString:[self getServiceUUID:self.curTransferID]]]) {
         for (CBCharacteristic *characteristic in service.characteristics) {
-            if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:kCharacteristicUUID]]) {
+            if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:[self getCharacteristicUUID:self.curTransferID]]]) {
                 [peripheral setNotifyValue:YES forCharacteristic:characteristic];
             }
         }
@@ -132,35 +206,30 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
     // Have we got everything we need?
     if ([stringFromData isEqualToString:@"EOM"]) {
         // We have, so show the data,
-        NSDictionary *externalSongsToTimes = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:self.data];
+        if(self.curTransferID == 1){
+        NSMutableArray *arr = [NSKeyedUnarchiver unarchiveObjectWithData:self.data];
         
-        
-        
-        [self.textView setText:[externalSongsToTimes description]];
-        
-        // Cancel our subscription to the characteristic
-        [peripheral setNotifyValue:NO forCharacteristic:characteristic];
-        
-        // and disconnect from the peripehral
-        //[self.centralManager cancelPeripheralConnection:peripheral];
-        self.sharedSongs = (NSArray *)[self findSharedSongs:externalSongsToTimes];
-        [self cleanupPeripheral];
-        //self.peripheral = nil;
-        self.alreadyReceivedData = TRUE;
+        NSLog([arr description]);
+        }
         if (self.delegate != nil){
-            if ([self.sharedSongs count] > 0){
-                if (self.alreadySentData){
-                    [self.delegate transferComplete:YES];
-                }
-                else{
-                    self.dataToSend = [NSKeyedArchiver archivedDataWithRootObject:[self getSongTimeDict:self.sharedSongs]];
-                    [self createPeripheral];
-                }
-                
+            // and disconnect from the scharactersitic
+            //[self.centralManager cancelPeripheralConnection:peripheral];
+            [self stopNotifying];
+            //self.peripheral = nil;
+            self.alreadyReceivedData = TRUE;
+            if (self.alreadySentData){
+                //just recieved data (this device had send it before receiving)
+                [self.delegate processSecondData:(NSData *)self.data];
+                self.syncInProgress = NO;
+                self.alreadyReceivedData = false;
+                self.alreadySentData = false;
+                [self.delegate transferComplete:YES];
             }
-            else{
-                NSLog(@"ERROR: No shared songs found");
-                [self.delegate transferComplete:NO];
+            else
+            {
+                [self.delegate processFirstData:(NSData *)self.data];
+                self.dataToSend = [self.delegate getSecondData];
+                [self switchCentralToPeripheral];
             }
         }
         else{
@@ -169,7 +238,6 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
     }
     
     else{
-        [self.textView setText:@"Getting Text..."];
         // Otherwise, just add the data on to what we already have
     }
     [self.data appendData:characteristic.value];
@@ -178,37 +246,27 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
     NSLog(@"Received: %@", stringFromData);
 }
 
--(NSDictionary *)getSongTimeDict:(NSArray *)songs{
-    NSMutableDictionary *returnDict = [[NSMutableDictionary alloc]init];
-    for (Song *song in songs){
-        [returnDict setObject:[song playbackDuration] forKey:[song title]];
-    }
-    return returnDict;
-}
-- (NSArray *)findSharedSongs:(NSDictionary *)potentialSongsToTimes{
-    NSMutableArray *sharedSongs = [[NSMutableArray alloc]init];
-    MPMediaQuery *songQuery = [[MPMediaQuery alloc] init];
-    NSArray *itemsFromGenericQuery = [songQuery items];
-    //NSMutableDictionary *internalSongsToTimes = [[NSMutableDictionary alloc]init];
-    for (MPMediaItem *song in itemsFromGenericQuery) {
-        NSString *songTitle = [song valueForProperty: MPMediaItemPropertyTitle];
-        NSNumber *potentialSongTime = [potentialSongsToTimes objectForKey:songTitle]; //theirSongTime nil if not on device (will occur often)
-        
-        //see if song in library is included in set of songs sent from other iPhone
-        if (potentialSongTime != nil){
-            NSNumber *ourSongTime = [song valueForProperty:MPMediaItemPropertyPlaybackDuration];
-            //...and see if time is the same, if so, add to set.
-            if([potentialSongTime isEqual: ourSongTime]){
-                NSString *songAlbum = [song valueForProperty: MPMediaItemPropertyAlbumTitle];
-                NSString *songArtist = [song valueForProperty: MPMediaItemPropertyArtist];
-                Song *songObj = [[Song alloc] initWithTitle:songTitle withArtist:songArtist withPlaybackDuration:ourSongTime withAlbum:songAlbum];
-                [sharedSongs addObject:songObj];
-            }
+-(void)switchCentralToPeripheral{
+    if (self.dataToSend != nil){
+        if (self.peripheralManager == nil){
+            [self createPeripheral];
+        }
+        else{
+            [self setupService];
         }
     }
-    return sharedSongs;
-}
+    else
+    {
+        NSLog(@"ERROR: Data sent back by second device will be nil, no need to continue.");
+        //no data to send, so end transfer
+        //TODO MIGHT NEED TO CLEANUP
+        self.syncInProgress = NO;
+        self.alreadyReceivedData = false;
+        self.alreadySentData = false;
+        [self.delegate transferComplete:NO];
+    }
 
+}
 /*
  - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
  if (error) {
@@ -216,7 +274,7 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
  }
  
  // Exits if it's not the transfer characteristic
- if (![characteristic.UUID isEqual:[CBUUID UUIDWithString:kCharacteristicUUID]]) {
+ if (![characteristic.UUID isEqual:[CBUUID UUIDWithString:[self getCharacteristicUUID:self.curTransferID]]]) {
  return;
  }
  
@@ -228,12 +286,12 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
  // so disconnect from the peripheral
  NSLog(@"Notification stopped on %@.  Disconnecting", characteristic);
  [self.centralManager cancelPeripheralConnection:self.peripheral];
- [self cleanupPeripheral];
+ [self stopNotifying];
  self.peripheral
  }
  }*/
 
-- (void)cleanupPeripheral{
+- (void)stopNotifying{
     // Don't do anything if we're not connected
     if (!self.peripheral.isConnected) {
         return;
@@ -243,7 +301,7 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
         for (CBService *service in self.peripheral.services) {
             if (service.characteristics != nil) {
                 for (CBCharacteristic *characteristic in service.characteristics) {
-                    if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:kCharacteristicUUID]]) {
+                    if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:[self getCharacteristicUUID:self.curTransferID]]]) {
                         if (characteristic.isNotifying) {
                             // It is notifying, so unsubscribe
                             [self.peripheral setNotifyValue:NO forCharacteristic:characteristic];
@@ -264,32 +322,17 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
 //couldnt find existing peripheral. Stop centralManager search and make peripheral ourselves
 - (void)createPeripheral
 {
-    //only create a peripheral if one has yet to be found
-    //if (self.peripheral == nil){
-    NSLog(@"existing peripheral not found. Creating one");
+    //only create a peripheral manager not created yet
+    if (self.peripheralManager == nil){
+        
+        NSLog(@"existing peripheral not found. Creating one");
     
-    //stop existing scan
-    [self.centralManager stopScan];
-    //make a peripheral manager
-    self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
-    //}
-}
-
--(NSData *)getSongData{
-    MPMediaQuery *songQuery = [[MPMediaQuery alloc] init];
-    NSArray *itemsFromGenericQuery = [songQuery items];
-    //NSMutableArray *allSongs = [[NSMutableArray alloc]init];
-    NSMutableDictionary *songsToTimes = [[NSMutableDictionary alloc]init];
-    for (MPMediaItem *song in itemsFromGenericQuery) {
-        NSString *songTitle = [song valueForProperty: MPMediaItemPropertyTitle];
-        //const NSString *songAlbum = [song valueForProperty: MPMediaItemPropertyAlbumTitle];
-        //const NSString *songArtist = [song valueForProperty: MPMediaItemPropertyArtist];
-        NSNumber *songLength = [song valueForProperty: MPMediaItemPropertyPlaybackDuration];
-        //Song *songObj = [[Song alloc] initWithTitle:songTitle withArtist:songArtist withPlaybackDuration:songLength withAlbum:songAlbum];
-        //[allSongs addObject:songObj];
-        [songsToTimes setValue:songLength forKey:songTitle];
+        //stop existing scan
+        //[self.centralManager stopScan];
+        //make a peripheral manager
+        self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
+    
     }
-    return [NSKeyedArchiver archivedDataWithRootObject:songsToTimes];
 }
 
 - (void)peripheralManager:(CBPeripheralManager *)peripheral didAddService:(CBService *)service error:(NSError *)error {
@@ -300,9 +343,10 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
         NSLog(@"service added successfully");
         // Starts advertising the service
         int serverNum = (self.alreadyReceivedData) ? 2 : 1;
-        [self.peripheralManager startAdvertising:@{ CBAdvertisementDataLocalNameKey : [NSString stringWithFormat:@"ICSERVER%i", serverNum], CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:kServiceUUID]] }];
+        [self.peripheralManager startAdvertising:@{ CBAdvertisementDataLocalNameKey : [NSString stringWithFormat:@"ICSERVER%i", serverNum], CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:[self getServiceUUID:self.curTransferID]]] }];
     }
 }
+//occurs on peripheral manager init
 - (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral {
     switch (peripheral.state) {
         case CBPeripheralManagerStatePoweredOn:
@@ -317,13 +361,13 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
 {
     NSLog(@"Setting up service");
     // Creates the characteristic UUID
-    CBUUID *characteristicUUID = [CBUUID UUIDWithString:kCharacteristicUUID];
+    CBUUID *characteristicUUID = [CBUUID UUIDWithString:[self getCharacteristicUUID:self.curTransferID]];
     
     // Creates the characteristic
     self.customCharacteristic = [[CBMutableCharacteristic alloc] initWithType:characteristicUUID properties:CBCharacteristicPropertyNotify value:nil permissions:CBAttributePermissionsReadable];
     
     // Creates the service UUID
-    CBUUID *serviceUUID = [CBUUID UUIDWithString:kServiceUUID];
+    CBUUID *serviceUUID = [CBUUID UUIDWithString:[self getServiceUUID:self.curTransferID]];
     
     // Creates the service and adds the characteristic to it
     self.customService = [[CBMutableService alloc] initWithType:serviceUUID primary:YES];
@@ -360,6 +404,11 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
             NSLog(@"Sent: EOM");
             self.alreadySentData = TRUE;
             if(self.alreadyReceivedData){
+                //CANT remove services because services must exist to enter the didDiscoverServices callback, which is necessary to setup any new services
+                //self.peripheralManager removeAllServices;
+                self.syncInProgress = NO;
+                self.alreadyReceivedData = false;
+                self.alreadySentData = false;
                 [self.delegate transferComplete:YES];
             }else{
                 [self switchPeripheralToCentral];
@@ -433,8 +482,6 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
                 [self switchPeripheralToCentral];
             }
             
-            
-            
             return;
         }
     }
@@ -442,10 +489,38 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
 
 -(void)switchPeripheralToCentral{
     if(self.peripheralManager != nil){
-        [self.peripheralManager stopAdvertising];
+
+        //[self.peripheralManager stopAdvertising];
+        //not 100% necessary but for one time transfers, might as well
+        [self.peripheralManager removeAllServices];
         //self.centralManager= nil; // not really necessary i don't think, but clarifies old central is done
-        [self performSelector:@selector(createCentral) withObject:nil afterDelay:2]; //wait 2 seconds so we know peripheral is setup on time
+        if (self.centralManager == nil){
+            [self performSelector:@selector(createCentral) withObject:nil afterDelay:2]; //wait 2 seconds so we know peripheral is setup on time
+            //[self createCentral];
+        }
+        else{
+            switch (self.centralManager.state) {
+                case CBCentralManagerStatePoweredOn:
+                    // Scans for any peripheral
+                    if (self.peripheral == nil){
+                        NSLog(@"ERROR: Central manager exists but doesn't have a peripheral with it");
+                    }
+                    else{
+                        [self performSelector:@selector(lookForServices) withObject:nil afterDelay:2];
+                        //[self lookForServices];
+                    }
+                    break;
+                default:
+                    NSLog(@"Could not find newly created peripheral to send data back to first (central manager not correct state_");
+                    break;
+            }
+        }
     }
+}
+-(void)lookForServices{
+    // Search only for services that match our UUID
+    NSLog(@"Looking for services");
+    [self.peripheral discoverServices:@[[CBUUID UUIDWithString:[self getServiceUUID:self.curTransferID]]]];
 }
 /** Catch when someone subscribes to our characteristic, then start sending them data
  */
@@ -459,8 +534,13 @@ static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9
     
     // Reset the index
     self.sendDataIndex = 0;
-    
+    //if (self.curTransferID == 1){
+    //NSMutableArray *arr = [NSKeyedUnarchiver unarchiveObjectWithData:self.dataToSend];
+
+    //NSLog([arr description]);
+    //}
     // Start sending
+   
     [self sendData];
 }
 

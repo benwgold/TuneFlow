@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		801EDEF01877808D00C22904 /* MediaPlayerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 801EDEEF1877808D00C22904 /* MediaPlayerVC.m */; };
 		8026870E186B4B090036F663 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 8026870D186B4B090036F663 /* Song.m */; };
 		80CBA816186A36A300AF3753 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA815186A36A300AF3753 /* Foundation.framework */; };
 		80CBA818186A36A300AF3753 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA817186A36A300AF3753 /* CoreGraphics.framework */; };
@@ -39,6 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		801EDEEE1877808D00C22904 /* MediaPlayerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MediaPlayerVC.h; path = ../MediaPlayerVC.h; sourceTree = "<group>"; };
+		801EDEEF1877808D00C22904 /* MediaPlayerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MediaPlayerVC.m; path = ../MediaPlayerVC.m; sourceTree = "<group>"; };
 		8026870C186B4B090036F663 /* Song.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Song.h; path = Models/Song.h; sourceTree = "<group>"; };
 		8026870D186B4B090036F663 /* Song.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Song.m; path = Models/Song.m; sourceTree = "<group>"; };
 		80CBA812186A36A300AF3753 /* TuneFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TuneFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,7 +141,8 @@
 		80CBA81B186A36A300AF3753 /* TuneFlow */ = {
 			isa = PBXGroup;
 			children = (
-				8026870B186B4ADF0036F663 /* Models */,
+				801EDEEE1877808D00C22904 /* MediaPlayerVC.h */,
+				801EDEEF1877808D00C22904 /* MediaPlayerVC.m */,
 				80CBA824186A36A300AF3753 /* TFAppDelegate.h */,
 				80CBA825186A36A300AF3753 /* TFAppDelegate.m */,
 				80CBA827186A36A300AF3753 /* Main.storyboard */,
@@ -146,10 +150,11 @@
 				80CBA856186A51CA00AF3753 /* TFNavigationController.m */,
 				80CBA82A186A36A300AF3753 /* TFViewController.h */,
 				80CBA82B186A36A300AF3753 /* TFViewController.m */,
-				80CBA82D186A36A300AF3753 /* Images.xcassets */,
-				80CBA81C186A36A300AF3753 /* Supporting Files */,
 				80CBA852186A4D8900AF3753 /* AllSongsTVC.h */,
 				80CBA853186A4D8900AF3753 /* AllSongsTVC.m */,
+				80CBA82D186A36A300AF3753 /* Images.xcassets */,
+				8026870B186B4ADF0036F663 /* Models */,
+				80CBA81C186A36A300AF3753 /* Supporting Files */,
 			);
 			path = TuneFlow;
 			sourceTree = "<group>";
@@ -290,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				801EDEF01877808D00C22904 /* MediaPlayerVC.m in Sources */,
 				8026870E186B4B090036F663 /* Song.m in Sources */,
 				80CBA854186A4D8900AF3753 /* AllSongsTVC.m in Sources */,
 				80CBA857186A51CA00AF3753 /* TFNavigationController.m in Sources */,

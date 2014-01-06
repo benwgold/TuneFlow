@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <MediaPlayer/MediaPlayer.h>
-#import "Models/Song.h"
 
 #import <CoreBluetooth/CoreBluetooth.h>
 
@@ -16,7 +14,11 @@
 //delegate protocol that allows the bluecomm to let its owning VC to do things after transfer
 @protocol BlueCommDelegate <NSObject>
 @required
--(void)transferComplete:(BOOL)successful ;
+-(void)transferComplete:(BOOL)successful;
+-(NSData *)getFirstData;
+-(void)processFirstData:(NSData *)data;
+-(NSData *)getSecondData;
+-(void)processSecondData:(NSData *)data;
 @end
 
 
@@ -29,14 +31,13 @@
 @property(nonatomic) bool alreadySentData;
 
 
-@property(nonatomic) bool syncStarted;
-@property(nonatomic) NSArray *sharedSongs;
+@property(nonatomic) bool syncInProgress;
+@property (nonatomic) NSInteger curTransferID;
 
 //central properties
 @property (nonatomic, strong) CBCentralManager *centralManager;
 @property (nonatomic, strong) CBPeripheral *peripheral;
 @property (nonatomic, strong) NSMutableData *data;
-@property (weak, nonatomic) IBOutlet UITextView *textView;
 
 //peripheral properties
 @property (nonatomic, strong) CBPeripheralManager *peripheralManager;
@@ -48,6 +49,6 @@
 #define NOTIFY_MTU      20
 
 -(id)init;
--(void)syncWithDevice;
+-(void)setupTransfer:(NSInteger)transferID;
 
 @end

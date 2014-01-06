@@ -7,7 +7,7 @@
         <!--Navigation Controller-->
         <scene sceneID="adx-wI-Vte">
             <objects>
-                <navigationController definesPresentationContext="YES" id="Aqg-1z-t9J" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="Aqg-1z-t9J" customClass="TFNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="fv6-l7-RIB">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -104,11 +104,44 @@
                     <navigationItem key="navigationItem" id="TQt-k6-uuW"/>
                     <connections>
                         <outlet property="tableView" destination="Fi5-zR-Axx" id="Xw4-6H-NKy"/>
+                        <segue destination="2QX-Lf-i3P" kind="push" id="bAB-bI-QLH"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wJy-Va-DJF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1065" y="-617"/>
+        </scene>
+        <!--Media PlayerVC - Media-->
+        <scene sceneID="gpS-5Z-NMH">
+            <objects>
+                <viewController storyboardIdentifier="MediaPlayer" title="Media" id="2QX-Lf-i3P" customClass="MediaPlayerVC" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="lPH-00-PHn"/>
+                        <viewControllerLayoutGuide type="bottom" id="ShT-GJ-7Kp"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="P3R-kt-CaM">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tNl-ut-d0e">
+                                <rect key="frame" x="17" y="62" width="287" height="390"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="o4G-Nz-ZRx"/>
+                    <connections>
+                        <outlet property="textView" destination="tNl-ut-d0e" id="K2p-Bj-NCy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Iuq-t5-pds" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1675" y="-615"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
