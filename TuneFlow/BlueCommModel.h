@@ -19,6 +19,9 @@
 -(void)processFirstData:(NSData *)data;
 -(NSData *)getSecondData;
 -(void)processSecondData:(NSData *)data;
+
+//-(void)fireOnSend;
+//-(void)fireOnReceive;
 @end
 
 

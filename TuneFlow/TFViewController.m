@@ -8,12 +8,11 @@
 
 #import "TFViewController.h"
 
-
+#import <CoreLocation/CoreLocation.h>
 
 @interface TFViewController ()
 
 @property(nonatomic) bool syncStarted;
-
 
 @end
 
@@ -35,8 +34,17 @@
 
 - (void)viewDidLoad
 {
+    //NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: .1 target: self selector:@selector(updateTime) userInfo: nil repeats:YES];
+ 
+
     self.blueComm = [[BlueCommModel alloc]init];
     self.blueComm.delegate = self;
+}
+-(void)updateTime{
+    double t =[[NSDate date] timeIntervalSince1970];
+    double c = CFAbsoluteTimeGetCurrent();
+
+    self.textView.text = [NSString stringWithFormat:@"%f", c];
 }
 
 - (IBAction)syncWithDevice:(id)sender {
@@ -83,13 +91,12 @@
 }
 - (NSArray *)findSharedSongs:(NSDictionary *)potentialSongsToTimes{
     NSMutableArray *sharedSongs = [[NSMutableArray alloc]init];
+    MPMediaPropertyPredicate *predicate = [MPMediaPropertyPredicate predicateWithValue:[NSNumber numberWithBool:0] forProperty:MPMediaItemPropertyIsCloudItem comparisonType:MPMediaPredicateComparisonEqualTo];
     MPMediaQuery *songQuery = [[MPMediaQuery alloc] init];
+    [songQuery addFilterPredicate:predicate];
     NSArray *itemsFromGenericQuery = [songQuery items];
     //NSMutableDictionary *internalSongsToTimes = [[NSMutableDictionary alloc]init];
     for (MPMediaItem *song in itemsFromGenericQuery) {
-        NSLog(@"Size of mediaitem");
-        NSLog([[NSString alloc]initWithFormat:@"%lu", sizeof(song)]);
-        if (![song valueForProperty:MPMediaItemPropertyIsCloudItem]){
             NSString *songTitle = [song valueForProperty: MPMediaItemPropertyTitle];
             NSNumber *potentialSongTime = [potentialSongsToTimes objectForKey:songTitle]; //theirSongTime nil if not on device (will occur often)
             
@@ -101,12 +108,9 @@
                     NSString *songAlbum = [song valueForProperty: MPMediaItemPropertyAlbumTitle];
                     NSString *songArtist = [song valueForProperty: MPMediaItemPropertyArtist];
                     Song *songObj = [[Song alloc] initWithTitle:songTitle withArtist:songArtist withPlaybackDuration:ourSongTime withAlbum:songAlbum];
-                    NSLog(@"Size of songobj");
-                    NSLog([[NSString alloc]initWithFormat:@"%lu", sizeof(songObj)]);
                     [sharedSongs addObject:songObj];
                 }
             }
-        }
     }
     return sharedSongs;
 }

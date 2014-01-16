@@ -10,7 +10,11 @@
 
 @interface BlueCommModel()
 
+NSArray const *arr;
+
 @end
+
+
 
 //static NSString * const kServiceUUID = @"2F1B1054-D3AE-4915-A2F6-161654BF12C7";
 //static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9FA98";
@@ -26,6 +30,7 @@
     _alreadyReceivedData = false;
     _alreadySentData = false;
     _syncInProgress = false;
+    arr = [NSArray arrayWithObjects:@"2F1B1054-D3AE-4915-A2F6-161654BF12C7",@"611836BD-BC8D-44D9-9059-C6BDC177CF01", nil];
     return self;
     
 }
@@ -113,7 +118,7 @@
 -(void)handlePeripheralNotFound{
     if (self.peripheral == nil){
         if (self.peripheralManager == nil){
-        [self createPeripheral];
+            [self createPeripheral];
         }
         else{
             NSLog(@"THinking about creating peripheral because central still has self.peripheral = nil, but self.peripheralmanager!=nil");
@@ -159,7 +164,7 @@
     }
     NSLog(@"trying to find services");
     bool serviceAlreadySetup = false;
-    NSLog([aPeripheral.services description]);
+    //NSLog([aPeripheral.services description]);
     for (CBService *service in aPeripheral.services) {
         NSLog(@"service found");
         NSLog(@"Service found with UUID: %@", service.UUID);
@@ -205,12 +210,8 @@
     NSString *stringFromData = [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding];
     // Have we got everything we need?
     if ([stringFromData isEqualToString:@"EOM"]) {
+        NSLog(@"JUST GOT END OF MESSAGE!");
         // We have, so show the data,
-        if(self.curTransferID == 1){
-        NSMutableArray *arr = [NSKeyedUnarchiver unarchiveObjectWithData:self.data];
-        
-        NSLog([arr description]);
-        }
         if (self.delegate != nil){
             // and disconnect from the scharactersitic
             //[self.centralManager cancelPeripheralConnection:peripheral];
@@ -402,6 +403,7 @@
             
             //do i need something here?
             NSLog(@"Sent: EOM");
+            NSLog(@"JUST GOT To END OF MESSAGE!");
             self.alreadySentData = TRUE;
             if(self.alreadyReceivedData){
                 //CANT remove services because services must exist to enter the didDiscoverServices callback, which is necessary to setup any new services
@@ -492,23 +494,23 @@
 
         //[self.peripheralManager stopAdvertising];
         //not 100% necessary but for one time transfers, might as well
-        [self.peripheralManager removeAllServices];
+       // [self.peripheralManager removeAllServices];
         //self.centralManager= nil; // not really necessary i don't think, but clarifies old central is done
         if (self.centralManager == nil){
             [self performSelector:@selector(createCentral) withObject:nil afterDelay:2]; //wait 2 seconds so we know peripheral is setup on time
             //[self createCentral];
         }
         else{
+            
             switch (self.centralManager.state) {
                 case CBCentralManagerStatePoweredOn:
                     // Scans for any peripheral
                     if (self.peripheral == nil){
-                        NSLog(@"ERROR: Central manager exists but doesn't have a peripheral with it");
+                        [self.centralManager scanForPeripheralsWithServices:@[ [CBUUID UUIDWithString:[self getServiceUUID:self.curTransferID]] ] options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
                     }
-                    else{
-                        [self performSelector:@selector(lookForServices) withObject:nil afterDelay:2];
+                    [self performSelector:@selector(lookForServices) withObject:nil afterDelay:2];
                         //[self lookForServices];
-                    }
+                    
                     break;
                 default:
                     NSLog(@"Could not find newly created peripheral to send data back to first (central manager not correct state_");
@@ -520,7 +522,13 @@
 -(void)lookForServices{
     // Search only for services that match our UUID
     NSLog(@"Looking for services");
-    [self.peripheral discoverServices:@[[CBUUID UUIDWithString:[self getServiceUUID:self.curTransferID]]]];
+    if (self.peripheral !=nil){
+        [self.peripheral discoverServices:@[[CBUUID UUIDWithString:[self getServiceUUID:self.curTransferID]]]];
+    }
+    else{
+        NSLog(@"ERROR: Central manager there...self.peripheral not.");
+        
+    }
 }
 /** Catch when someone subscribes to our characteristic, then start sending them data
  */
@@ -534,11 +542,7 @@
     
     // Reset the index
     self.sendDataIndex = 0;
-    //if (self.curTransferID == 1){
-    //NSMutableArray *arr = [NSKeyedUnarchiver unarchiveObjectWithData:self.dataToSend];
-
-    //NSLog([arr description]);
-    //}
+    
     // Start sending
    
     [self sendData];

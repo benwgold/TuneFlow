@@ -13,4 +13,20 @@
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (strong, nonatomic) BlueCommModel *blueComm;
 @property (strong, nonatomic) NSArray *playlist;
+
+@property (strong, nonatomic) NSArray *mediaItemPlaylist;
+
+
+@property (nonatomic) double offset;
+@property (nonatomic) bool isLead;
+
+@property (nonatomic) double startSettingUpReturnTime;
+
+-(void)startPlay;
+
+-(void)transferComplete:(BOOL)successful;
+-(NSData *)getFirstData;
+-(void)processFirstData:(NSData *)data;
+-(NSData *)getSecondData;
+-(void)processSecondData:(NSData *)data;
 @end
