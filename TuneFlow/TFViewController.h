@@ -20,6 +20,8 @@
 @property (strong, nonatomic) IBOutlet UIView *syncButton;
 
 @property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet UILabel *statusView;
+
 @property(nonatomic) NSArray *sharedSongs;
 
 

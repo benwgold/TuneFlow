@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		801EDEF01877808D00C22904 /* MediaPlayerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 801EDEEF1877808D00C22904 /* MediaPlayerVC.m */; };
 		8026870E186B4B090036F663 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = 8026870D186B4B090036F663 /* Song.m */; };
+		80AFE092188E4E77003170A3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80AFE091188E4E77003170A3 /* AVFoundation.framework */; };
+		80B8F50C197F3B0600509786 /* app-configs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 80B8F50B197F3B0600509786 /* app-configs.plist */; };
 		80CBA816186A36A300AF3753 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA815186A36A300AF3753 /* Foundation.framework */; };
 		80CBA818186A36A300AF3753 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA817186A36A300AF3753 /* CoreGraphics.framework */; };
 		80CBA81A186A36A300AF3753 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CBA819186A36A300AF3753 /* UIKit.framework */; };
@@ -44,6 +46,8 @@
 		801EDEEF1877808D00C22904 /* MediaPlayerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MediaPlayerVC.m; path = ../MediaPlayerVC.m; sourceTree = "<group>"; };
 		8026870C186B4B090036F663 /* Song.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Song.h; path = Models/Song.h; sourceTree = "<group>"; };
 		8026870D186B4B090036F663 /* Song.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Song.m; path = Models/Song.m; sourceTree = "<group>"; };
+		80AFE091188E4E77003170A3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		80B8F50B197F3B0600509786 /* app-configs.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "app-configs.plist"; sourceTree = "<group>"; };
 		80CBA812186A36A300AF3753 /* TuneFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TuneFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80CBA815186A36A300AF3753 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		80CBA817186A36A300AF3753 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -78,6 +82,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				80CBA84B186A394F00AF3753 /* MediaPlayer.framework in Frameworks */,
+				80AFE092188E4E77003170A3 /* AVFoundation.framework in Frameworks */,
 				80CBA818186A36A300AF3753 /* CoreGraphics.framework in Frameworks */,
 				80CBA81A186A36A300AF3753 /* UIKit.framework in Frameworks */,
 				80CBA816186A36A300AF3753 /* Foundation.framework in Frameworks */,
@@ -129,6 +134,7 @@
 		80CBA814186A36A300AF3753 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				80AFE091188E4E77003170A3 /* AVFoundation.framework */,
 				80CBA84A186A394F00AF3753 /* MediaPlayer.framework */,
 				80CBA815186A36A300AF3753 /* Foundation.framework */,
 				80CBA817186A36A300AF3753 /* CoreGraphics.framework */,
@@ -166,6 +172,7 @@
 				80CBA81E186A36A300AF3753 /* InfoPlist.strings */,
 				80CBA821186A36A300AF3753 /* main.m */,
 				80CBA823186A36A300AF3753 /* TuneFlow-Prefix.pch */,
+				80B8F50B197F3B0600509786 /* app-configs.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -276,6 +283,7 @@
 			files = (
 				80CBA82E186A36A300AF3753 /* Images.xcassets in Resources */,
 				80CBA820186A36A300AF3753 /* InfoPlist.strings in Resources */,
+				80B8F50C197F3B0600509786 /* app-configs.plist in Resources */,
 				80CBA829186A36A300AF3753 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

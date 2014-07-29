@@ -51,7 +51,7 @@
 -(void)transferComplete:(BOOL)successful{
     if (successful){
         MediaPlayerVC *vc =[self.storyboard instantiateViewControllerWithIdentifier:@"MediaPlayer"];
-        [vc setPlaylist: self.finalPlaylist];
+        [vc setSongTitles: self.finalPlaylist];
         [vc setBlueComm: self.blueComm];
         self.blueComm.delegate = vc;
         [self.navigationController pushViewController:vc animated:true];
@@ -130,11 +130,9 @@
     //if ([self.selectedSongs containsObject:song]){
     if ([self.selectedSongs containsObject:[song title]]){
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        
     }
     else{
         cell.accessoryType = UITableViewCellAccessoryNone;
-        
     }
     // Configure the cell...
     

@@ -7,23 +7,32 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MediaPlayer/MediaPlayer.h>
+#import <AVFoundation/AVFoundation.h>
+
 #import "BlueCommModel.h"
 
-@interface MediaPlayerVC : UIViewController
+static const double START_TIME_OFFSET_SECS = 10;
+
+@interface MediaPlayerVC : UIViewController <BlueCommDelegate>
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (strong, nonatomic) BlueCommModel *blueComm;
-@property (strong, nonatomic) NSArray *playlist;
 
+@property (strong, nonatomic) NSArray *songTitles;
 @property (strong, nonatomic) NSArray *mediaItemPlaylist;
 
+
+@property (strong, nonatomic) AVPlayer *audioPlayer;
+@property (nonatomic) NSInteger curSongIndex;
 
 @property (nonatomic) double offset;
 @property (nonatomic) bool isLead;
 
 @property (nonatomic) double startSettingUpReturnTime;
 
--(void)startPlay;
+-(void)playMusic;
 
+//bluecomm delegate methods
 -(void)transferComplete:(BOOL)successful;
 -(NSData *)getFirstData;
 -(void)processFirstData:(NSData *)data;

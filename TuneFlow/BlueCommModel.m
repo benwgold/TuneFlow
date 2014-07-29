@@ -10,17 +10,31 @@
 
 @interface BlueCommModel()
 
-NSArray const *arr;
 
 @end
 
+//notification properties
+static NSString *const NOTIFICATION_NAME = @"bluecommstatus";
+static NSString *const SETUP_KEY = @"setting up";
+static NSString *const WAITING_KEY = @"waiting";
+static NSString *const SCANNING_KEY = @"scanning";
+static NSString *const CONNECTING = @"connecting";
+static NSString *const SENDING_KEY = @"sending";
+static NSString *const RECEIVING_KEY = @"receiving";
 
+static NSString *const SETTING_ERROR_MESSAGE = @"Loading string could not be found";
 
 //static NSString * const kServiceUUID = @"2F1B1054-D3AE-4915-A2F6-161654BF12C7";
 //static NSString * const kCharacteristicUUID = @"E275E53A-EE3F-46F2-B408-727EEFE9FA98";
 
 
 @implementation BlueCommModel
+
+
+//Class method that returns the corresponding name of the notifications sent out
++ (NSString *)notificationName{
+    return NOTIFICATION_NAME;
+}
 
 - (id)init
 {
@@ -30,7 +44,7 @@ NSArray const *arr;
     _alreadyReceivedData = false;
     _alreadySentData = false;
     _syncInProgress = false;
-    arr = [NSArray arrayWithObjects:@"2F1B1054-D3AE-4915-A2F6-161654BF12C7",@"611836BD-BC8D-44D9-9059-C6BDC177CF01", nil];
+    //arr = [NSArray arrayWithObjects:@"2F1B1054-D3AE-4915-A2F6-161654BF12C7",@"611836BD-BC8D-44D9-9059-C6BDC177CF01", nil];
     return self;
     
 }
@@ -61,7 +75,25 @@ NSArray const *arr;
     }
 }
 
+- (NSString *)getStatusForKey: (NSString *)key{
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"app-configs" ofType:@"plist"];
+    NSDictionary *settings = [[NSDictionary dictionaryWithContentsOfFile:path] objectForKey:@"bluetooth"];
+    NSString * val = [settings objectForKey:key];
+    if (val == nil){
+        NSLog(SETTING_ERROR_MESSAGE);
+    }
+    return val;
+}
+-(void) notifyDelegateWithMessage:(NSString *)message{
+    //Add content to user info. The dictionary KEY for the message is the same as the NOTIFICATION_NAME.
+    NSDictionary* content = [[NSDictionary alloc] initWithObjectsAndKeys:message,NOTIFICATION_NAME, nil];
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:NOTIFICATION_NAME object:nil userInfo:content]];
+}
+
+
 - (void)setupTransfer:(NSInteger)transferID{
+    [self notifyDelegateWithMessage:[self getStatusForKey:SETUP_KEY]];
+    
     if (!self.syncInProgress){ //make sure sync only called once, can cause issues otherwise
         self.curTransferID = transferID;
         self.syncInProgress = true;
@@ -102,7 +134,6 @@ NSArray const *arr;
     switch (central.state) {
         case CBCentralManagerStatePoweredOn:
             // Scans for any peripheral
-            
             [self performSelector:@selector(handlePeripheralNotFound) withObject:nil afterDelay:5.0];
             
             [self.centralManager scanForPeripheralsWithServices:@[ [CBUUID UUIDWithString:[self getServiceUUID:self.curTransferID]] ] options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
@@ -121,7 +152,7 @@ NSArray const *arr;
             [self createPeripheral];
         }
         else{
-            NSLog(@"THinking about creating peripheral because central still has self.peripheral = nil, but self.peripheralmanager!=nil");
+            NSLog(@"Thinking about creating peripheral because central still has self.peripheral = nil, but self.peripheralmanager!=nil");
         }
     }
 }
@@ -176,7 +207,6 @@ NSArray const *arr;
         }
     }
     //used when stuff is already created
-
     if((self.peripheralManager != nil) && !serviceAlreadySetup){
         //this happens to start the exchange after the very first exchange.  First guy looks for peripheral services. Cant find any.  Sets up service himself.
         [self setupService];
@@ -192,6 +222,7 @@ NSArray const *arr;
     if ([service.UUID isEqual:[CBUUID UUIDWithString:[self getServiceUUID:self.curTransferID]]]) {
         for (CBCharacteristic *characteristic in service.characteristics) {
             if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:[self getCharacteristicUUID:self.curTransferID]]]) {
+                [self notifyDelegateWithMessage:[self getStatusForKey:RECEIVING_KEY]];
                 [peripheral setNotifyValue:YES forCharacteristic:characteristic];
             }
         }
@@ -213,9 +244,7 @@ NSArray const *arr;
         NSLog(@"JUST GOT END OF MESSAGE!");
         // We have, so show the data,
         if (self.delegate != nil){
-            // and disconnect from the scharactersitic
-            //[self.centralManager cancelPeripheralConnection:peripheral];
-            [self stopNotifying];
+
             //self.peripheral = nil;
             self.alreadyReceivedData = TRUE;
             if (self.alreadySentData){
@@ -232,6 +261,9 @@ NSArray const *arr;
                 self.dataToSend = [self.delegate getSecondData];
                 [self switchCentralToPeripheral];
             }
+            // and disconnect from the scharactersitic
+            //[self.centralManager cancelPeripheralConnection:peripheral];
+            [self stopNotifying];
         }
         else{
             NSLog(@"ERROR: No delegate for bluecomm specified");
@@ -360,6 +392,8 @@ NSArray const *arr;
 }
 -(void) setupService
 {
+    [self notifyDelegateWithMessage:[self getStatusForKey:WAITING_KEY]];
+
     NSLog(@"Setting up service");
     // Creates the characteristic UUID
     CBUUID *characteristicUUID = [CBUUID UUIDWithString:[self getCharacteristicUUID:self.curTransferID]];
@@ -458,7 +492,9 @@ NSArray const *arr;
         }
         
         NSString *stringFromData = [[NSString alloc] initWithData:chunk encoding:NSUTF8StringEncoding];
-        NSLog(@"Sent: %@", stringFromData);
+        double doubleFromData;
+        memcpy(&doubleFromData, [chunk bytes], sizeof(doubleFromData));
+        NSLog(@"Sent: String-%@ Double-%f", stringFromData, doubleFromData);
         
         // It did send, so update our index
         self.sendDataIndex += amountToSend;
@@ -501,7 +537,6 @@ NSArray const *arr;
             //[self createCentral];
         }
         else{
-            
             switch (self.centralManager.state) {
                 case CBCentralManagerStatePoweredOn:
                     // Scans for any peripheral
@@ -509,8 +544,6 @@ NSArray const *arr;
                         [self.centralManager scanForPeripheralsWithServices:@[ [CBUUID UUIDWithString:[self getServiceUUID:self.curTransferID]] ] options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
                     }
                     [self performSelector:@selector(lookForServices) withObject:nil afterDelay:2];
-                        //[self lookForServices];
-                    
                     break;
                 default:
                     NSLog(@"Could not find newly created peripheral to send data back to first (central manager not correct state_");
@@ -520,6 +553,8 @@ NSArray const *arr;
     }
 }
 -(void)lookForServices{
+    [self notifyDelegateWithMessage:[self getStatusForKey:SCANNING_KEY]];
+
     // Search only for services that match our UUID
     NSLog(@"Looking for services");
     if (self.peripheral !=nil){
@@ -527,13 +562,13 @@ NSArray const *arr;
     }
     else{
         NSLog(@"ERROR: Central manager there...self.peripheral not.");
-        
     }
 }
 /** Catch when someone subscribes to our characteristic, then start sending them data
  */
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didSubscribeToCharacteristic:(CBCharacteristic *)characteristic
 {
+    [self notifyDelegateWithMessage:[self getStatusForKey:SENDING_KEY]];
     NSLog(@"Central subscribed to characteristic");
     
     // Get the data
@@ -542,9 +577,15 @@ NSArray const *arr;
     
     // Reset the index
     self.sendDataIndex = 0;
+    //if time sync transfer, setting self.dataToSend is a signal to not measure time until just before sending.
+    //Used for accuracy and time synchronization
+    if (self.curTransferID == 2 && self.dataToSend == [NSData data]){
+            double curTime = CFAbsoluteTimeGetCurrent();
+            [self.delegate receiveBluetoothTimestamp:curTime];
+            self.dataToSend = [NSData dataWithBytes:&curTime length:sizeof(double)];
+    }
     
     // Start sending
-   
     [self sendData];
 }
 

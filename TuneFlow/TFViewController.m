@@ -13,7 +13,7 @@
 @interface TFViewController ()
 
 @property(nonatomic) bool syncStarted;
-
+@property NSInteger counter;
 @end
 
 
@@ -21,6 +21,8 @@
 
 -(void)transferComplete:(BOOL)successful {
     if (successful){
+        [self displayTransferUpdates:NO];
+        
         AllSongsTVC *vc =[self.storyboard instantiateViewControllerWithIdentifier:@"AllSongs"];
         [vc setSharedSongs: self.sharedSongs];
         [vc setBlueComm: self.blueComm];
@@ -34,31 +36,67 @@
 
 - (void)viewDidLoad
 {
+    [self.textView setText:@"Everything Ok"];
+    self.textView.text = @"Still OK";
     //NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: .1 target: self selector:@selector(updateTime) userInfo: nil repeats:YES];
- 
+  /*  self.counter = 0;
+    self.gps = [[CLLocationManager alloc]
+                init];
+    [self.gps startUpdatingHeading];
 
+    NSTimer *t = [NSTimer scheduledTimerWithTimeInterval:.1 target:self
+                                                selector:@selector(updateTime) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:t forMode:NSDefaultRunLoopMode];
+*/
     self.blueComm = [[BlueCommModel alloc]init];
     self.blueComm.delegate = self;
 }
--(void)updateTime{
-    double t =[[NSDate date] timeIntervalSince1970];
-    double c = CFAbsoluteTimeGetCurrent();
 
-    self.textView.text = [NSString stringWithFormat:@"%f", c];
+-(void)updateTime{
+    //NSDate* now = [self.gps heading].timestamp;
+    //self.textView.text = [NSString stringWithFormat:@"%@%ld", [now description],self.counter];
+    //self.counter = self.counter +1;
+    //double c = CFAbsoluteTimeGetCurrent();
+    //self.textView.text = [NSString stringWithFormat:@"Corrected Time: %f/nSystem Time: %f/nOffset: %f", c+self.offset, c, self.offset];
 }
 
 - (IBAction)syncWithDevice:(id)sender {
     if (!self.syncStarted){ //make sure sync only called once, can cause issues otherwise
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        [center addObserverForName:nil
+                            object:nil
+                             queue:nil
+                        usingBlock:^(NSNotification *notification)
+         {
+             NSString *message = [[notification userInfo] objectForKey:[BlueCommModel notificationName]];
+             _statusView.text =  [NSString stringWithFormat:@"%@", message];
+         }];
+        [self displayTransferUpdates:YES];
         self.syncStarted = true;
         //get data to send to central connecters
         [self.blueComm setupTransfer:0];
     }
 }
+
+-(void)displayTransferUpdates:(BOOL)comm{
+    if (comm){
+        [[NSNotificationCenter defaultCenter]addObserverForName:[BlueCommModel notificationName]
+                                                object:nil
+                                                queue:nil
+                                                usingBlock:^(NSNotification *notification)
+         {
+             _statusView.text = [notification.userInfo objectForKey:[BlueCommModel notificationName]];
+         }];
+    }
+    else{
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:[BlueCommModel notificationName] object:nil];
+        _statusView.text = @"";
+    }
+}
+         
 -(NSData *)getFirstData{
     return [self getSongData];
 }
-
-
 
 -(void)processFirstData:(NSData *)data{
     NSDictionary *externalSongsToTimes = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:data];
@@ -95,7 +133,6 @@
     MPMediaQuery *songQuery = [[MPMediaQuery alloc] init];
     [songQuery addFilterPredicate:predicate];
     NSArray *itemsFromGenericQuery = [songQuery items];
-    //NSMutableDictionary *internalSongsToTimes = [[NSMutableDictionary alloc]init];
     for (MPMediaItem *song in itemsFromGenericQuery) {
             NSString *songTitle = [song valueForProperty: MPMediaItemPropertyTitle];
             NSNumber *potentialSongTime = [potentialSongsToTimes objectForKey:songTitle]; //theirSongTime nil if not on device (will occur often)

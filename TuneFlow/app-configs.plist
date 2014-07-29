@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>labels</key>
+	<dict/>
+	<key>bluetooth</key>
+	<dict>
+		<key>setting up</key>
+		<string>Setting up connection...</string>
+		<key>scanning</key>
+		<string>Looking for device...</string>
+		<key>connecting</key>
+		<string>Connecting...</string>
+		<key>sending</key>
+		<string>Sending data to paired device...</string>
+		<key>receiving</key>
+		<string>Receiving data from paired device...</string>
+		<key>waiting</key>
+		<string>Waiting for prepared device...</string>
+	</dict>
+</dict>
+</plist>

@@ -19,7 +19,9 @@
 -(void)processFirstData:(NSData *)data;
 -(NSData *)getSecondData;
 -(void)processSecondData:(NSData *)data;
-
+@optional
+//Callback triggered by passing for getFirstData or getSecondData methods, results in sending the time instead.
+-(void)receiveBluetoothTimestamp:(double)timestamp;
 //-(void)fireOnSend;
 //-(void)fireOnReceive;
 @end
@@ -49,9 +51,15 @@
 @property (nonatomic) NSInteger sendDataIndex;
 @property (nonatomic) NSData *dataToSend;
 
+
+
+
 #define NOTIFY_MTU      20
 
++(NSString *)notificationName;
 -(id)init;
 -(void)setupTransfer:(NSInteger)transferID;
 
 @end
+
+

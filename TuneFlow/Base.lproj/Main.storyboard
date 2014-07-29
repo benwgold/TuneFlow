@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Aqg-1z-t9J">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Aqg-1z-t9J">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -32,27 +32,37 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L7T-Tj-UcX">
-                                <rect key="frame" x="73" y="94" width="146" height="90"/>
+                                <rect key="frame" x="87" y="93" width="146" height="90"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.0039215688589999999" green="1" blue="0.81176477670000002" alpha="1" colorSpace="deviceRGB"/>
-                                <state key="normal" title="Sync With Device"/>
+                                <color key="backgroundColor" red="0.078431375324726105" green="0.090196080505847931" blue="0.027450982481241226" alpha="1" colorSpace="deviceRGB"/>
+                                <state key="normal" title="Sync With Device">
+                                    <color key="titleColor" red="0.97254908084869385" green="0.086274512112140656" blue="0.039215687662363052" alpha="1" colorSpace="deviceRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="syncWithDevice:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="ZZ4-Qo-OIo"/>
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="TRANSFERRED TEXT" translatesAutoresizingMaskIntoConstraints="NO" id="Cxz-Eg-OC7">
-                                <rect key="frame" x="0.0" y="230" width="320" height="291"/>
+                                <rect key="frame" x="72" y="345" width="177" height="146"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Qz-T5-RuX">
+                                <rect key="frame" x="20" y="226" width="280" height="43"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.023529414087533951" green="0.0039215688593685627" blue="0.015686275437474251" alpha="0.47999999999999998" colorSpace="deviceRGB"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="egG-IH-4xB"/>
                     <navigationItem key="navigationItem" id="OVJ-vT-jbb"/>
                     <connections>
+                        <outlet property="statusView" destination="7Qz-T5-RuX" id="L2u-qh-tz0"/>
                         <outlet property="syncButton" destination="L7T-Tj-UcX" id="4sh-gB-xeB"/>
                         <outlet property="textView" destination="Cxz-Eg-OC7" id="3BB-qe-CpF"/>
                         <segue destination="Lma-9W-xOS" kind="push" id="MGZ-Lr-RGk"/>
