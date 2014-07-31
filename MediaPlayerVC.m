@@ -71,7 +71,8 @@
 }
 
 -(void)playCurrentSong{
-    AVPlayerItem* currentItem = [self.mediaItemPlaylist objectAtIndex:self.curSongIndex];
+    MPMediaItem* curSong = [self.mediaItemPlaylist objectAtIndex:self.curSongIndex];
+    AVPlayerItem *currentI tem = [AVPlayerItem playerItemWithURL:[curSong valueForProperty:MPMediaItemPropertyAssetURL]];
     [self.audioPlayer replaceCurrentItemWithPlayerItem:currentItem];
     [self.audioPlayer play];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:currentItem];

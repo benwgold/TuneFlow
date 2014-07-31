@@ -421,8 +421,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "168"
             endingLineNumber = "168"
-            landmarkName = "-centralManager:didDiscoverPeripheral:advertisementData:RSSI:"
-            landmarkType = "5">
+            landmarkName = "@implementation BlueCommModel"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -501,7 +501,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "104"
             endingLineNumber = "104"
-            landmarkName = "-getSecondData"
+            landmarkName = "-processFirstData:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -549,7 +549,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "83"
             endingLineNumber = "83"
-            landmarkName = "-syncWithDevice:"
+            landmarkName = "-displayTransferUpdates:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -565,7 +565,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "99"
             endingLineNumber = "99"
-            landmarkName = "-processFirstData:"
+            landmarkName = "-getFirstData"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -581,8 +581,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "100"
             endingLineNumber = "100"
-            landmarkName = "-getSecondData"
-            landmarkType = "5">
+            landmarkName = "@implementation TFViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -597,7 +597,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "105"
             endingLineNumber = "105"
-            landmarkName = "-getSecondData"
+            landmarkName = "-processFirstData:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -613,7 +613,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "215"
             endingLineNumber = "215"
-            landmarkName = "-peripheral:didDiscoverServices:"
+            landmarkName = "-peripheral:didDiscoverCharacteristicsForService:error:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -645,7 +645,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "127"
             endingLineNumber = "127"
-            landmarkName = "-findSharedSongs:"
+            landmarkName = "-getSongTimeDict:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -707,7 +707,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "69"
             endingLineNumber = "69"
-            landmarkName = "-playCurrentSong"
+            landmarkName = "-displayTransferUpdates:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -755,7 +755,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "126"
             endingLineNumber = "126"
-            landmarkName = "-findSharedSongs:"
+            landmarkName = "-getSongTimeDict:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -851,7 +851,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "62"
             endingLineNumber = "62"
-            landmarkName = "-viewDidLoad"
+            landmarkName = "-displayTransferUpdates:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -862,12 +862,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MediaPlayerVC.m"
-            timestampString = "426749633.811626"
+            timestampString = "428482236.831028"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "75"
-            endingLineNumber = "75"
-            landmarkName = "-itemDidFinishPlaying:"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "-playCurrentSong"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -878,28 +878,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MediaPlayerVC.m"
-            timestampString = "426749633.811626"
+            timestampString = "428482236.831028"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
-            landmarkName = "-itemDidFinishPlaying:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MediaPlayerVC.m"
-            timestampString = "426749633.811626"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
-            landmarkName = "-getFirstData"
+            startingLineNumber = "122"
+            endingLineNumber = "122"
+            landmarkName = "-updateTime"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1034,7 +1018,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TuneFlow/BlueCommModel.m"
@@ -1044,6 +1028,22 @@
             startingLineNumber = "90"
             endingLineNumber = "90"
             landmarkName = "-notifyDelegateWithMessage:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MediaPlayerVC.m"
+            timestampString = "428482038.47649"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
+            landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
