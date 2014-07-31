@@ -36,29 +36,10 @@
 
 - (void)viewDidLoad
 {
-    [self.textView setText:@"Everything Ok"];
-    self.textView.text = @"Still OK";
-    //NSTimer *t = [NSTimer scheduledTimerWithTimeInterval: .1 target: self selector:@selector(updateTime) userInfo: nil repeats:YES];
-  /*  self.counter = 0;
-    self.gps = [[CLLocationManager alloc]
-                init];
-    [self.gps startUpdatingHeading];
-
-    NSTimer *t = [NSTimer scheduledTimerWithTimeInterval:.1 target:self
-                                                selector:@selector(updateTime) userInfo:nil repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:t forMode:NSDefaultRunLoopMode];
-*/
     self.blueComm = [[BlueCommModel alloc]init];
     self.blueComm.delegate = self;
 }
 
--(void)updateTime{
-    //NSDate* now = [self.gps heading].timestamp;
-    //self.textView.text = [NSString stringWithFormat:@"%@%ld", [now description],self.counter];
-    //self.counter = self.counter +1;
-    //double c = CFAbsoluteTimeGetCurrent();
-    //self.textView.text = [NSString stringWithFormat:@"Corrected Time: %f/nSystem Time: %f/nOffset: %f", c+self.offset, c, self.offset];
-}
 
 - (IBAction)syncWithDevice:(id)sender {
     if (!self.syncStarted){ //make sure sync only called once, can cause issues otherwise

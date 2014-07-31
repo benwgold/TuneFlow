@@ -35,23 +35,18 @@
     
     
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
-    //set up audio player    MPMediaItem *song = [self.mediaItemPlaylist objectAtIndex:0];
+    //set up audio player
     if ([self.mediaItemPlaylist count] > 0){
-        MPMediaItem* song = [self.mediaItemPlaylist objectAtIndex:0];
-        AVPlayerItem * item = [AVPlayerItem playerItemWithURL:[song valueForProperty:MPMediaItemPropertyAssetURL]];
         self.audioPlayer = [[AVPlayer alloc] init];
-
     }
     else{
-        self.textView.text = @"The playlist was empty";
+        [self returnToSongList];
         //exit(1);
     }
-	// Do any additional setup after loading the view.
     self.offset = 0;
     
-    //listen for notificatiosn from bluecomm
+    //listen for notificatiosn from bluecomm, and begin transfer
     [self displayTransferUpdates:YES];
-    
     [self.blueComm setupTransfer:2];
 }
 
@@ -62,7 +57,7 @@
                              queue:nil
                         usingBlock:^(NSNotification *notification)
          {
-             _textView.text = [notification.userInfo objectForKey:[BlueCommModel notificationName]];
+             _titleLabel.text = [notification.userInfo objectForKey:[BlueCommModel notificationName]];
          }];
     }
     else{
@@ -72,18 +67,30 @@
 
 -(void)playCurrentSong{
     MPMediaItem* curSong = [self.mediaItemPlaylist objectAtIndex:self.curSongIndex];
-    AVPlayerItem *currentI tem = [AVPlayerItem playerItemWithURL:[curSong valueForProperty:MPMediaItemPropertyAssetURL]];
+    AVPlayerItem *currentItem = [AVPlayerItem playerItemWithURL:[curSong valueForProperty:MPMediaItemPropertyAssetURL]];
     [self.audioPlayer replaceCurrentItemWithPlayerItem:currentItem];
     [self.audioPlayer play];
+    _titleLabel.text = [curSong valueForProperty:MPMediaItemPropertyTitle];
+    _artistLabel.text = [curSong valueForProperty:MPMediaItemPropertyArtist];
+    MPMediaItemArtwork *art = [curSong valueForProperty:MPMediaItemPropertyArtwork];
+    _albumView.image = [art imageWithSize:_albumView.bounds.size];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:currentItem];
 }
 
 //Play next song automatically
 -(void)itemDidFinishPlaying:(AVPlayerItem *)item{
     self.curSongIndex++;
+    //Return to list if completed.
+    if (self.curSongIndex >= [self.mediaItemPlaylist count]){
+        [self returnToSongList];
+    }
     [self playCurrentSong];
 }
 
+
+-(void)returnToSongList{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 -(void)setMediaItemPlaylist:(NSArray *)mediaItemPlaylist{
     NSMutableArray *mediaItems = [[NSMutableArray alloc]init];
@@ -175,67 +182,6 @@
     //self.offset = -.5*(timestamp-CFAbsoluteTimeGetCurrent());
     self.offset = 0;
 }
-/*
--(NSArray *)constructMediaItemArray:(NSArray *)playlist{
-    NSMutableArray *items = [[NSMutableArray alloc]initWithArray:arr];
-    NSMutableArray *sharedSongs = [[NSMutableArray alloc]init];
-    MPMediaQuery *songQuery = [[MPMediaQuery alloc] init];
-    NSArray *itemsFromGenericQuery = [songQuery items];
-    //NSMutableDictionary *internalSongsToTimes = [[NSMutableDictionary alloc]init];
-    for (MPMediaItem *song in itemsFromGenericQuery) {
-        NSLog(@"Size of mediaitem");
-        NSLog([[NSString alloc]initWithFormat:@"%lu", sizeof(song)]);
-        if (![song valueForProperty:MPMediaItemPropertyIsCloudItem]){
-            NSString *songTitle = [song valueForProperty: MPMediaItemPropertyTitle];
-            NSNumber *potentialSongTime = [potentialSongsToTimes objectForKey:songTitle]; //theirSongTime nil if not on device (will occur often)
-            
-            //see if song in library is included in set of songs sent from other iPhone
-            if (potentialSongTime != nil){
-                NSNumber *ourSongTime = [song valueForProperty:MPMediaItemPropertyPlaybackDuration];
-                //...and see if time is the same, if so, add to set.
-                if([potentialSongTime isEqual: ourSongTime]){
-                    NSString *songAlbum = [song valueForProperty: MPMediaItemPropertyAlbumTitle];
-                    NSString *songArtist = [song valueForProperty: MPMediaItemPropertyArtist];
-                    Song *songObj = [[Song alloc] initWithTitle:songTitle withArtist:songArtist withPlaybackDuration:ourSongTime withAlbum:songAlbum];
-                    NSLog(@"Size of songobj");
-                    NSLog([[NSString alloc]initWithFormat:@"%lu", sizeof(songObj)]);
-                    [sharedSongs addObject:songObj];
-                }
-            }
-        }
-    }
-}
-
-- (NSArray *)findSharedSongs:(NSDictionary *)potentialSongsToTimes{
-    NSMutableArray *sharedSongs = [[NSMutableArray alloc]init];
-    MPMediaQuery *songQuery = [[MPMediaQuery alloc] init];
-    NSArray *itemsFromGenericQuery = [songQuery items];
-    //NSMutableDictionary *internalSongsToTimes = [[NSMutableDictionary alloc]init];
-    for (MPMediaItem *song in itemsFromGenericQuery) {
-        NSLog(@"Size of mediaitem");
-        NSLog([[NSString alloc]initWithFormat:@"%lu", sizeof(song)]);
-        if (![song valueForProperty:MPMediaItemPropertyIsCloudItem]){
-            NSString *songTitle = [song valueForProperty: MPMediaItemPropertyTitle];
-            NSNumber *potentialSongTime = [potentialSongsToTimes objectForKey:songTitle]; //theirSongTime nil if not on device (will occur often)
-            
-            //see if song in library is included in set of songs sent from other iPhone
-            if (potentialSongTime != nil){
-                NSNumber *ourSongTime = [song valueForProperty:MPMediaItemPropertyPlaybackDuration];
-                //...and see if time is the same, if so, add to set.
-                if([potentialSongTime isEqual: ourSongTime]){
-                    NSString *songAlbum = [song valueForProperty: MPMediaItemPropertyAlbumTitle];
-                    NSString *songArtist = [song valueForProperty: MPMediaItemPropertyArtist];
-                    Song *songObj = [[Song alloc] initWithTitle:songTitle withArtist:songArtist withPlaybackDuration:ourSongTime withAlbum:songAlbum];
-                    NSLog(@"Size of songobj");
-                    NSLog([[NSString alloc]initWithFormat:@"%lu", sizeof(songObj)]);
-                    [sharedSongs addObject:songObj];
-                }
-            }
-        }
-    }
-    return sharedSongs;
-}
-  */
 
 - (void)didReceiveMemoryWarning
 {

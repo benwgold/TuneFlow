@@ -15,7 +15,10 @@
 static const double START_TIME_OFFSET_SECS = 10;
 
 @interface MediaPlayerVC : UIViewController <BlueCommDelegate>
-@property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *artistLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *albumView;
+
 @property (strong, nonatomic) BlueCommModel *blueComm;
 
 @property (strong, nonatomic) NSArray *songTitles;

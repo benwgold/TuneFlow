@@ -35,7 +35,6 @@
                                 target:self
                                 action:@selector(startMediaPlayer)];
     self.navigationItem.rightBarButtonItem = btnSave;
-    //self.navigationController.navigationBar.
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -50,11 +49,16 @@
 }
 -(void)transferComplete:(BOOL)successful{
     if (successful){
-        MediaPlayerVC *vc =[self.storyboard instantiateViewControllerWithIdentifier:@"MediaPlayer"];
-        [vc setSongTitles: self.finalPlaylist];
-        [vc setBlueComm: self.blueComm];
-        self.blueComm.delegate = vc;
-        [self.navigationController pushViewController:vc animated:true];
+        if ([self.finalPlaylist count] > 0){
+            MediaPlayerVC *vc =[self.storyboard instantiateViewControllerWithIdentifier:@"MediaPlayer"];
+            [vc setSongTitles: self.finalPlaylist];
+            [vc setBlueComm: self.blueComm];
+            self.blueComm.delegate = vc;
+            [self.navigationController pushViewController:vc animated:true];
+        }
+        else{
+            [[[UIAlertView alloc]initWithTitle:@"Empty Playlist" message:@"Neither use selected any songs" delegate:self cancelButtonTitle:@"Reselect" otherButtonTitles: nil] show];
+        }
     }
     else{
         NSLog(@"ERROR: Transfer was not successful");
@@ -126,8 +130,6 @@
     [cell.detailTextLabel setText:(NSString *)[song artist]];
     
     //Make sure check mark is correct when dequeueing (also have to do on select, but this fixes problem where check appears multiple times when one cell is pressed)
-
-    //if ([self.selectedSongs containsObject:song]){
     if ([self.selectedSongs containsObject:[song title]]){
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
@@ -135,7 +137,6 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     // Configure the cell...
-    
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -143,20 +144,15 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     Song *song = [self.sharedSongs objectAtIndex:indexPath.row];
-    
-    //if ([self.selectedSongs containsObject:song]){
-    //    [self.selectedSongs removeObject:song];
+
     if ([self.selectedSongs containsObject:[song title]]){
         [self.selectedSongs removeObject:[song title]];
         cell.accessoryType = UITableViewCellAccessoryNone;
 
     }
     else{
-        //[self.selectedSongs addObject:song];
         [self.selectedSongs addObject:[song title]];
-
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-
     }
 }
 
@@ -212,5 +208,4 @@
 }
 
  */
-
 @end
